@@ -43,7 +43,7 @@ public class MockSharedPreferences implements SharedPreferences {
     public int getInt(String key, int defValue) {
         if(mData.containsKey(key)) {
             if(mData.get(key) instanceof Integer) {
-                return (int) mData.get(key);
+                return (Integer) mData.get(key);
             }
         }
         return defValue;
