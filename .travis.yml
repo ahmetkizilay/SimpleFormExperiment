@@ -19,4 +19,4 @@ before_script:
 
 
 script: ./gradlew :app:connectedAndroidTest
-# script: ./gradlew clean assembleDebug
+# script: ./gradlew clean assembleDebug --debug --stacktrace
