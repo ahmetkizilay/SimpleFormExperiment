@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.view.ContextThemeWrapper;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -12,7 +13,6 @@ import java.util.Map;
  * Created by ahmetkizilay on 20.12.2014.
  */
 public class MockSharedPrefsWithThemeWrapper extends ContextThemeWrapper {
-    MockSharedPreferences mockSharedPreferences;
     private List<String> mSharedPrefName;
     private List<Map<String, ?>> mSharedPrefData;
 
@@ -39,9 +39,11 @@ public class MockSharedPrefsWithThemeWrapper extends ContextThemeWrapper {
 
     @Override
     public SharedPreferences getSharedPreferences(String name, int mode) {
-        if(mSharedPrefName.contains(name)) {
-            return new MockSharedPreferences(mSharedPrefData.get(mSharedPrefName.indexOf(name)));
+        if(!mSharedPrefName.contains(name)) {
+            mSharedPrefName.add(name);
+            mSharedPrefData.add(new HashMap<String, Object>());
         }
-        return null;
+
+       return new MockSharedPreferences(mSharedPrefData.get(mSharedPrefName.indexOf(name)));
     }
 }
