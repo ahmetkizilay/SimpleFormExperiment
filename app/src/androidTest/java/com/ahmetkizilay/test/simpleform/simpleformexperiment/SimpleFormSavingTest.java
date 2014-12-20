@@ -101,11 +101,21 @@ public class SimpleFormSavingTest extends ActivityUnitTestCase<MainActivity> {
     }
 
     /**
-     * fields should be saved in shared preferences
+     * fields should be cleared and button should fall back to disabled after click
      * activity should open viewfragment
      */
     public void testSaveButtonClicked() {
-        // throw new UnsupportedOperationException("Not Implemented yet");
+        String name = "John Smith";
+        String age = "22";
+
+        etName.setText(name);
+        etAge.setText(age);
+
+        btnSubmit.performClick();
+
+        assertTrue("Name field should be empty", etName.getText().toString().equals(""));
+        assertTrue("Age field should be empty", etAge.getText().toString().equals(""));
+        assertFalse("Submit button should be disabled", btnSubmit.isEnabled());
     }
 
 }

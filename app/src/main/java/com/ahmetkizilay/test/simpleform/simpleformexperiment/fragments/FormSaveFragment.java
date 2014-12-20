@@ -61,6 +61,14 @@ public class FormSaveFragment extends Fragment {
         etName.addTextChangedListener(tw);
         etAge.addTextChangedListener(tw);
 
+        btnSubmit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                etName.setText("");
+                etAge.setText("");
+            }
+        });
+
         return v;
     }
 
