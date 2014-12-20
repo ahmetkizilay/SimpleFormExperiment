@@ -5,10 +5,8 @@ import android.content.SharedPreferences;
 import android.view.ContextThemeWrapper;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 /**
  * Created by ahmetkizilay on 20.12.2014.
