@@ -14,6 +14,9 @@ until [[ "$bootanim" =~ "stopped" ]]; do
         exit 1
       fi
    fi
+   if [[ "$bootanim" =~ "running" ]]; then
+     break
+   fi
    sleep 1
 done
 echo "Done"
