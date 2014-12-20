@@ -2,15 +2,29 @@ package com.ahmetkizilay.test.simpleform.simpleformexperiment.mock;
 
 import android.content.SharedPreferences;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 
 /**
  * Created by ahmetkizilay on 20.12.2014.
  */
-public class MockEditor implements SharedPreferences.Editor {
+class MockEditor implements SharedPreferences.Editor {
+    private Map<String, Object> mChanges;
+    private CommitRequestListener mListener;
+
+    public MockEditor() {
+        mChanges = new HashMap<>();
+    }
+
+    public void setCommitRequestListener(CommitRequestListener listener) {
+        this.mListener = listener;
+    }
+
     @Override
     public SharedPreferences.Editor putString(String key, String value) {
-        return null;
+       mChanges.put(key, value);
+       return this;
     }
 
     @Override
@@ -20,7 +34,8 @@ public class MockEditor implements SharedPreferences.Editor {
 
     @Override
     public SharedPreferences.Editor putInt(String key, int value) {
-        return null;
+       mChanges.put(key, new Integer(value));
+        return this;
     }
 
     @Override
@@ -50,11 +65,18 @@ public class MockEditor implements SharedPreferences.Editor {
 
     @Override
     public boolean commit() {
-        return false;
+        apply();
+        return true;
     }
 
     @Override
     public void apply() {
+        if(mListener != null) {
+            mListener.onCommitRequested(this.mChanges);
+        }
+    }
 
+    interface CommitRequestListener {
+        public void onCommitRequested(Map<String, Object> map);
     }
 }

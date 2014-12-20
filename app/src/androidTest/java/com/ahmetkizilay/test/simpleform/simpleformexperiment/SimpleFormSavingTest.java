@@ -1,12 +1,14 @@
 package com.ahmetkizilay.test.simpleform.simpleformexperiment;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
-import android.test.ActivityInstrumentationTestCase2;
+import android.content.SharedPreferences;
 import android.test.ActivityUnitTestCase;
-import android.view.ContextThemeWrapper;
 import android.widget.Button;
 import android.widget.EditText;
+
+import com.ahmetkizilay.test.simpleform.simpleformexperiment.mock.MockSharedPrefsWithThemeWrapper;
 
 /**
  * Created by ahmetkizilay on 20.12.2014.
@@ -16,6 +18,7 @@ public class SimpleFormSavingTest extends ActivityUnitTestCase<MainActivity> {
         super(MainActivity.class);
     }
 
+    private MockSharedPrefsWithThemeWrapper mMockContext;
     private Activity mActivity;
 
     private EditText etName;
@@ -27,8 +30,8 @@ public class SimpleFormSavingTest extends ActivityUnitTestCase<MainActivity> {
     protected void setUp() throws Exception {
         super.setUp();
 
-        ContextThemeWrapper context = new ContextThemeWrapper(getInstrumentation().getTargetContext(), R.style.AppTheme);
-        setActivityContext(context);
+        mMockContext = new MockSharedPrefsWithThemeWrapper(getInstrumentation().getTargetContext(), R.style.AppTheme);
+        setActivityContext(mMockContext);
 
         Intent intent = new Intent(getInstrumentation().getTargetContext(), MainActivity.class);
         startActivity(intent, null, null);
@@ -102,20 +105,26 @@ public class SimpleFormSavingTest extends ActivityUnitTestCase<MainActivity> {
 
     /**
      * fields should be cleared and button should fall back to disabled after click
-     * activity should open viewfragment
+     * age and name fields should save the values in shared preferences
      */
     public void testSaveButtonClicked() {
         String name = "John Smith";
-        String age = "22";
+        int age = 24;
 
         etName.setText(name);
-        etAge.setText(age);
+        etAge.setText(age + "");
 
         btnSubmit.performClick();
 
         assertTrue("Name field should be empty", etName.getText().toString().equals(""));
         assertTrue("Age field should be empty", etAge.getText().toString().equals(""));
         assertFalse("Submit button should be disabled", btnSubmit.isEnabled());
+
+        SharedPreferences sp = mMockContext.getSharedPreferences("info", Context.MODE_PRIVATE);
+        assertNotNull("info shared preference should exist", sp);
+
+        assertTrue("name field should equal to the defined value", sp.getString("name", "").equals(name));
+        assertEquals("age field should equal to the defined value", age, sp.getInt("age", -1));
     }
 
 }

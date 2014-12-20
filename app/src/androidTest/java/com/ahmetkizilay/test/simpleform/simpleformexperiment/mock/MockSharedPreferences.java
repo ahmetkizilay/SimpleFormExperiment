@@ -2,6 +2,7 @@ package com.ahmetkizilay.test.simpleform.simpleformexperiment.mock;
 
 import android.content.SharedPreferences;
 
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
@@ -11,10 +12,10 @@ import java.util.Set;
  *
  * Created by ahmetkizilay on 20.12.2014.
  */
-public class MockSharedPreferences implements SharedPreferences {
+class MockSharedPreferences implements SharedPreferences {
 
-    private Map<String, ?> mData;
-    public MockSharedPreferences(Map<String, ?> data) {
+    private Map<String, Object> mData;
+    public MockSharedPreferences(Map<String, Object> data) {
         mData = data;
     }
 
@@ -71,7 +72,17 @@ public class MockSharedPreferences implements SharedPreferences {
 
     @Override
     public Editor edit() {
-        return null;
+        MockEditor mockEditor = new MockEditor();
+        mockEditor.setCommitRequestListener(new MockEditor.CommitRequestListener() {
+            @Override
+            public void onCommitRequested(Map<String, Object> map) {
+                for(Iterator<String> keys = map.keySet().iterator(); keys.hasNext();) {
+                    String key = keys.next();
+                    mData.put(key, map.get(key));
+                }
+            }
+        });
+        return mockEditor;
     }
 
     @Override

@@ -14,7 +14,7 @@ import java.util.Map;
  */
 public class MockSharedPrefsWithThemeWrapper extends ContextThemeWrapper {
     private List<String> mSharedPrefName;
-    private List<Map<String, ?>> mSharedPrefData;
+    private List<Map<String, Object>> mSharedPrefData;
 
     public MockSharedPrefsWithThemeWrapper(Context context, int theme) {
         super(context, theme);
@@ -25,7 +25,7 @@ public class MockSharedPrefsWithThemeWrapper extends ContextThemeWrapper {
 
     }
 
-    public void addNewSharedPref(String name, Map<String, ?> map) {
+    public void addNewSharedPref(String name, Map<String, Object> map) {
         if(mSharedPrefName.contains(name)) {
             int index = mSharedPrefName.indexOf(name);
             mSharedPrefData.remove(index);

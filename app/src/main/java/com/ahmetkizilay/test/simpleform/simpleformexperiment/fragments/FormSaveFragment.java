@@ -12,6 +12,7 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.ahmetkizilay.test.simpleform.simpleformexperiment.R;
+import com.ahmetkizilay.test.simpleform.simpleformexperiment.wrappers.UserStorage;
 
 /**
  * Created by ahmetkizilay on 20.12.2014.
@@ -64,8 +65,19 @@ public class FormSaveFragment extends Fragment {
         btnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                String name = etName.getText().toString();
+                int age;
+                try {
+                    age = Integer.parseInt(etAge.getText().toString());
+                }
+                catch(NumberFormatException nfe) {
+                    return;
+                }
+
                 etName.setText("");
                 etAge.setText("");
+
+                UserStorage.updateUser(getActivity(), name, age);
             }
         });
 
@@ -91,4 +103,6 @@ public class FormSaveFragment extends Fragment {
 
         btnSubmit.setEnabled(enabled);
     }
+
+
 }
