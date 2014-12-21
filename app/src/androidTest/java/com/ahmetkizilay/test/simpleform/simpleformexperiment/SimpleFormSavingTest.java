@@ -123,7 +123,7 @@ public class SimpleFormSavingTest extends ActivityUnitTestCase<MainActivity> {
         SharedPreferences sp = mMockContext.getSharedPreferences("info", Context.MODE_PRIVATE);
         assertNotNull("info shared preference should exist", sp);
 
-        assertTrue("name field should equal to the defined value", sp.getString("name", "").equals(name));
+        assertEquals("name field should equal to the defined value", name, sp.getString("name", ""));
         assertEquals("age field should equal to the defined value", age, sp.getInt("age", -1));
     }
 

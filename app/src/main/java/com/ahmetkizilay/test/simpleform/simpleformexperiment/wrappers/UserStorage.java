@@ -14,4 +14,13 @@ public class UserStorage {
         SharedPreferences sp = context.getSharedPreferences(NAME, Context.MODE_PRIVATE);
         sp.edit().putString("name", username).putInt("age", age).commit();
     }
+
+    public static User getUser(Context context) {
+        SharedPreferences sp = context.getSharedPreferences(NAME, Context.MODE_PRIVATE);
+        User newUser = new User();
+        newUser.name = sp.getString("name", "");
+        newUser.age = sp.getInt("age", -1);
+
+        return newUser;
+    }
 }

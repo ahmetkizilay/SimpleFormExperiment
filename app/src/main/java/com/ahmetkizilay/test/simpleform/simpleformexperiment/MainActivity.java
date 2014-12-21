@@ -6,6 +6,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.ahmetkizilay.test.simpleform.simpleformexperiment.fragments.FormSaveFragment;
+import com.ahmetkizilay.test.simpleform.simpleformexperiment.fragments.FormShowFragment;
+import com.ahmetkizilay.test.simpleform.simpleformexperiment.wrappers.User;
+import com.ahmetkizilay.test.simpleform.simpleformexperiment.wrappers.UserStorage;
 
 
 public class MainActivity extends ActionBarActivity {
@@ -15,9 +18,20 @@ public class MainActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        FormSaveFragment frgSave = FormSaveFragment.getInstance();
-        getSupportFragmentManager().beginTransaction()
-                .add(R.id.loFrgContainer, frgSave, FormSaveFragment.NAME)
-                .commit();
+        User user = UserStorage.getUser(this);
+
+        if(user.getName().equals("")) {
+            FormSaveFragment frgSave = FormSaveFragment.getInstance();
+            getSupportFragmentManager().beginTransaction()
+                    .add(R.id.loFrgContainer, frgSave, FormSaveFragment.NAME)
+                    .commit();
+        }
+        else {
+            FormShowFragment frgShow = FormShowFragment.getInstance(user.getName(), user.getAge());
+            getSupportFragmentManager().beginTransaction()
+                    .add(R.id.loFrgContainer, frgShow, FormShowFragment.NAME)
+                    .commit();
+        }
+
     }
 }
