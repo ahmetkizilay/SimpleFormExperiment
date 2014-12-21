@@ -33,6 +33,8 @@ public class FormSaveFragment extends Fragment {
 
     private Button btnSubmit;
 
+    private ActionListener mListener;
+
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_formsave, container, false);
@@ -77,7 +79,9 @@ public class FormSaveFragment extends Fragment {
                 etName.setText("");
                 etAge.setText("");
 
-                UserStorage.updateUser(getActivity(), name, age);
+                if(mListener != null) {
+                    mListener.onSave(name, age);
+                }
             }
         });
 
@@ -102,6 +106,14 @@ public class FormSaveFragment extends Fragment {
         }
 
         btnSubmit.setEnabled(enabled);
+    }
+
+    public void setActionListener(ActionListener listener) {
+        this.mListener = listener;
+    }
+
+    public interface ActionListener {
+        public void onSave(String name, int age);
     }
 
 

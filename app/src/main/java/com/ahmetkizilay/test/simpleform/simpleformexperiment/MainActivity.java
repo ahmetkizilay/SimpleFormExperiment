@@ -21,17 +21,33 @@ public class MainActivity extends ActionBarActivity {
         User user = UserStorage.getUser(this);
 
         if(user.getName().equals("")) {
-            FormSaveFragment frgSave = FormSaveFragment.getInstance();
-            getSupportFragmentManager().beginTransaction()
-                    .add(R.id.loFrgContainer, frgSave, FormSaveFragment.NAME)
-                    .commit();
+            addSaveFragment();
         }
         else {
-            FormShowFragment frgShow = FormShowFragment.getInstance(user.getName(), user.getAge());
-            getSupportFragmentManager().beginTransaction()
-                    .add(R.id.loFrgContainer, frgShow, FormShowFragment.NAME)
-                    .commit();
+            addShowFragment(user);
         }
+    }
 
+    private void addSaveFragment() {
+        FormSaveFragment frgSave = FormSaveFragment.getInstance();
+        frgSave.setActionListener(new FormSaveFragment.ActionListener() {
+            @Override
+            public void onSave(String name, int age) {
+                UserStorage.updateUser(MainActivity.this, name, age);
+
+                User user = UserStorage.getUser(MainActivity.this);
+                addShowFragment(user);
+            }
+        });
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.loFrgContainer, frgSave, FormSaveFragment.NAME)
+                .commit();
+    }
+
+    private void addShowFragment(User user) {
+        FormShowFragment frgShow = FormShowFragment.getInstance(user.getName(), user.getAge());
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.loFrgContainer, frgShow, FormShowFragment.NAME)
+                .commit();
     }
 }

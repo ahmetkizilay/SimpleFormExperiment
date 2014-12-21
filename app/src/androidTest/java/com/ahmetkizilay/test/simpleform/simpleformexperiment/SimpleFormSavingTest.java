@@ -4,10 +4,13 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.support.v4.app.FragmentActivity;
 import android.test.ActivityUnitTestCase;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.ahmetkizilay.test.simpleform.simpleformexperiment.fragments.FormSaveFragment;
+import com.ahmetkizilay.test.simpleform.simpleformexperiment.fragments.FormShowFragment;
 import com.ahmetkizilay.test.simpleform.simpleformexperiment.mock.MockSharedPrefsWithThemeWrapper;
 
 /**
@@ -19,7 +22,7 @@ public class SimpleFormSavingTest extends ActivityUnitTestCase<MainActivity> {
     }
 
     private MockSharedPrefsWithThemeWrapper mMockContext;
-    private Activity mActivity;
+    private FragmentActivity mActivity;
 
     private EditText etName;
     private EditText etAge;
@@ -104,7 +107,7 @@ public class SimpleFormSavingTest extends ActivityUnitTestCase<MainActivity> {
     }
 
     /**
-     * fields should be cleared and button should fall back to disabled after click
+     * save fragment should be gone after save, and show fragment should be displayed instead
      * age and name fields should save the values in shared preferences
      */
     public void testSaveButtonClicked() {
@@ -116,15 +119,18 @@ public class SimpleFormSavingTest extends ActivityUnitTestCase<MainActivity> {
 
         btnSubmit.performClick();
 
-        assertTrue("Name field should be empty", etName.getText().toString().equals(""));
-        assertTrue("Age field should be empty", etAge.getText().toString().equals(""));
-        assertFalse("Submit button should be disabled", btnSubmit.isEnabled());
+        assertNull("Show Fragment should not be visible", mActivity.getSupportFragmentManager().findFragmentByTag(FormShowFragment.NAME));
 
         SharedPreferences sp = mMockContext.getSharedPreferences("info", Context.MODE_PRIVATE);
         assertNotNull("info shared preference should exist", sp);
 
         assertEquals("name field should equal to the defined value", name, sp.getString("name", ""));
         assertEquals("age field should equal to the defined value", age, sp.getInt("age", -1));
+
+        mActivity.getSupportFragmentManager().executePendingTransactions();
+
+        assertNotNull("Show Fragment should be visible", mActivity.getSupportFragmentManager().findFragmentByTag(FormShowFragment.NAME));
+        assertNull("Save Fragment should not be visible", mActivity.getSupportFragmentManager().findFragmentByTag(FormSaveFragment.NAME));
     }
 
 }
