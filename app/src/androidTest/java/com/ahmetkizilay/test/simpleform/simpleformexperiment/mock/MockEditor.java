@@ -76,6 +76,7 @@ class MockEditor implements SharedPreferences.Editor {
     public void apply() {
         if(mListener != null) {
             mListener.onCommitRequested(this.mChanges);
+            this.mChanges.clear();
         }
     }
 

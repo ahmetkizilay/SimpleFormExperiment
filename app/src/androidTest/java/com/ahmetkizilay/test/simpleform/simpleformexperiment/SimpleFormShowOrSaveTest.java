@@ -42,8 +42,7 @@ public class SimpleFormShowOrSaveTest extends ActivityUnitTestCase<MainActivity>
         startActivity(intent, null, null);
 
         FragmentActivity mActivity = getActivity();
-
-        getInstrumentation().callActivityOnStart(mActivity);
+        mActivity.getSupportFragmentManager().executePendingTransactions();
 
         assertNotNull("FormShowFragment should be displayed", mActivity.getSupportFragmentManager().findFragmentByTag(FormShowFragment.NAME));
     }
@@ -60,8 +59,7 @@ public class SimpleFormShowOrSaveTest extends ActivityUnitTestCase<MainActivity>
 
         FragmentActivity mActivity = getActivity();
 
-        getInstrumentation().callActivityOnStart(mActivity);
-
+        mActivity.getSupportFragmentManager().executePendingTransactions();
         assertNotNull("FormSaveFragment should be displayed", mActivity.getSupportFragmentManager().findFragmentByTag(FormSaveFragment.NAME));
     }
 
