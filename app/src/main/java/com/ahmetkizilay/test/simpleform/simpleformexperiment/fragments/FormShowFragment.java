@@ -35,6 +35,8 @@ public class FormShowFragment extends Fragment {
 
     private Button btnClear;
 
+    private ActionListener mListener;
+
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_formshow, container, false);
@@ -50,7 +52,24 @@ public class FormShowFragment extends Fragment {
         tvName.setText(name);
         tvAge.setText(age + "");
 
+        btnClear.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(mListener != null) {
+                    mListener.onClearRequested();
+                }
+            }
+        });
+
         return v;
+    }
+
+    public void setActionListener(ActionListener listener) {
+        this.mListener = listener;
+    }
+
+    public interface ActionListener {
+        public void onClearRequested();
     }
 
 

@@ -3,6 +3,7 @@ package com.ahmetkizilay.test.simpleform.simpleformexperiment.mock;
 import android.content.SharedPreferences;
 
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -75,10 +76,17 @@ class MockSharedPreferences implements SharedPreferences {
         MockEditor mockEditor = new MockEditor();
         mockEditor.setCommitRequestListener(new MockEditor.CommitRequestListener() {
             @Override
-            public void onCommitRequested(Map<String, Object> map) {
-                for(Iterator<String> keys = map.keySet().iterator(); keys.hasNext();) {
-                    String key = keys.next();
-                    mData.put(key, map.get(key));
+            public void onCommitRequested(List<MockEditor.EditHolder> changes) {
+                for(MockEditor.EditHolder currentChange : changes) {
+                    switch(currentChange.action) {
+                        case MockEditor.EditAction.CLEAR:
+                            mData.clear();
+                            break;
+                        case MockEditor.EditAction.EDIT:
+                        default:
+                            mData.put(currentChange.key, currentChange.value);
+                            break;
+                    }
                 }
             }
         });

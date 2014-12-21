@@ -46,6 +46,14 @@ public class MainActivity extends ActionBarActivity {
 
     private void addShowFragment(User user) {
         FormShowFragment frgShow = FormShowFragment.getInstance(user.getName(), user.getAge());
+        frgShow.setActionListener(new FormShowFragment.ActionListener() {
+            @Override
+            public void onClearRequested() {
+                UserStorage.clearUser(MainActivity.this);
+
+                addSaveFragment();
+            }
+        });
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.loFrgContainer, frgShow, FormShowFragment.NAME)
                 .commit();

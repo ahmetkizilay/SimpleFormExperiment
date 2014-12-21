@@ -2,7 +2,9 @@ package com.ahmetkizilay.test.simpleform.simpleformexperiment.mock;
 
 import android.content.SharedPreferences;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -10,11 +12,11 @@ import java.util.Set;
  * Created by ahmetkizilay on 20.12.2014.
  */
 class MockEditor implements SharedPreferences.Editor {
-    private Map<String, Object> mChanges;
+    private List<EditHolder> mChanges;
     private CommitRequestListener mListener;
 
     public MockEditor() {
-        mChanges = new HashMap<>();
+        mChanges = new ArrayList<>();
     }
 
     public void setCommitRequestListener(CommitRequestListener listener) {
@@ -23,7 +25,7 @@ class MockEditor implements SharedPreferences.Editor {
 
     @Override
     public SharedPreferences.Editor putString(String key, String value) {
-       mChanges.put(key, value);
+       mChanges.add(new EditHolder(key, value));
        return this;
     }
 
@@ -34,7 +36,7 @@ class MockEditor implements SharedPreferences.Editor {
 
     @Override
     public SharedPreferences.Editor putInt(String key, int value) {
-       mChanges.put(key, new Integer(value));
+       mChanges.add(new EditHolder(key, new Integer(value)));
         return this;
     }
 
@@ -60,7 +62,8 @@ class MockEditor implements SharedPreferences.Editor {
 
     @Override
     public SharedPreferences.Editor clear() {
-        return null;
+        mChanges.add(new EditHolder(EditAction.CLEAR, null, null));
+        return this;
     }
 
     @Override
@@ -77,6 +80,31 @@ class MockEditor implements SharedPreferences.Editor {
     }
 
     interface CommitRequestListener {
-        public void onCommitRequested(Map<String, Object> map);
+        public void onCommitRequested(List<EditHolder> edits);
+    }
+
+    class EditHolder {
+        public String key;
+        public Object value;
+        public int action;
+
+        public EditHolder(String key, Object value) {
+            this.key = key;
+            this.value = value;
+            this.action = EditAction.EDIT;
+        }
+
+
+        public EditHolder(int action, String key, Object value) {
+            this.action = action;
+            this.value = value;
+            this.key = key;
+        }
+
+    }
+
+    class EditAction {
+        final static int CLEAR = 0;
+        final static int EDIT = 1;
     }
 }

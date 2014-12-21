@@ -23,4 +23,10 @@ public class UserStorage {
 
         return newUser;
     }
+
+
+    public static void clearUser(Context context) {
+        SharedPreferences sp = context.getSharedPreferences(NAME, Context.MODE_PRIVATE);
+        sp.edit().clear().commit();
+    }
 }
